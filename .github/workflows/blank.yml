@@ -29,6 +29,25 @@ jobs:
         shell: bash
         run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
+
+  deploy-main:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ needs.build.outputs.branch == 'main' }}
+    steps:
+      - name: Download built frontend files
+        run: |
+          echo "Build main branch"
+  
+  deploy-edition_v1:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ needs.build.outputs.branch == 'edition_v1' }}
+    steps:
+      - name: Download built frontend files
+        run: |
+          echo "Build edition_v1 branch"
+
       # Runs a single command using the runners shell
 #      - name: Run a one-line script
 #        run: echo Hello, world!
