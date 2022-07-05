@@ -11,22 +11,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Set output
-        id: vars
+      - uses: actions/checkout@v3
+      - name: Extract tags name
+        shell: bash
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-      - name: Check output
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
-  deploy-colorado:
-    needs: build
-    runs-on: ubuntu-latest
-    if: ${{ env.RELEASE_VERSION == 'colorado-v*' }}
-    steps:
-      - name: Download built frontend files
-        run: |
-          echo "Build main branch"
+        id: extract_tag
+
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Set output
+#        id: vars
+#        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+#      - name: Check output
+#        env:
+#          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+#        run: |
+#          echo $RELEASE_VERSION
+#          echo ${{ steps.vars.outputs.tag }}
+#  deploy-colorado:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    if: ${{ env.RELEASE_VERSION == 'colorado-v*' }}
+#    steps:
+#      - name: Download built frontend files
+#        run: |
+#          echo "Build main branch"
