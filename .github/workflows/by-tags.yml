@@ -4,30 +4,18 @@ name: CI
 
 ## Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+#  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     tags:
       - '*'
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    outputs:
-      tags: ${{ steps.vars.outputs.tag }}
     steps:
       - uses: actions/checkout@v2
       - name: Set output
         id: vars
-        run: echo ::set-output name=tags::${GITHUB_REF#refs/*/}
-
-  deploy-colorado:
-    needs: build
-    runs-on: ubuntu-latest
-    if: ${{ steps.vars.outputs.tag == colorado-v }}
-    steps:
-      - name: Download built frontend files
-        run: |
-          echo "Build colorado branch"
-
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - name: Check output
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
