@@ -1,59 +1,24 @@
-# This is a basic workflow to help you get started with Actions
+## This is a basic workflow to help you get started with Actions
 
 name: CI
 
-# Controls when the workflow will run
+## Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    tags: [ colorado-v*, califor-v* ]
-#  pull_request:
-#    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    tags:
+      - 'v*.*.*'
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test:
     runs-on: ubuntu-latest
-    outputs:
-      tags: ${{ steps.extract_tags.outputs.tags }}
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - name: Extract tags name
-        shell: bash
-        run: echo "::set-output name=tags::${GITHUB_REF/refs\/tags\//}"
-        id: extract_tags
-
-  deploy-main:
-    needs: build
-    runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.tags == 'colorado-v*' }}
-    steps:
-      - name: Download built frontend files
+      - uses: actions/checkout@v2
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Check output
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
-          echo "Build colorado-v tag"
-  
-  deploy-edition_v1:
-    needs: build
-    runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.tags == 'califor-v*' }}
-    steps:
-      - name: Download built frontend files
-        run: |
-          echo "Build califor-v* tags"
-
-      # Runs a single command using the runners shell
-#      - name: Run a one-line script
-#        run: echo Hello, world!
-#
-#      # Runs a set of commands using the runners shell
-#      - name: Run a multi-line script
-#        run: |
-#          echo Add other actions to build,
-#          echo test, and deploy your project.
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
