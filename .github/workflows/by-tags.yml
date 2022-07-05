@@ -8,6 +8,8 @@ on:
   push:
     tags:
       - '*'
+env:
+  LATEST: v1
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,12 +22,12 @@ jobs:
         shell: bash
         run: |
           echo "pr is ${{ steps.check.outputs.valid }}"
-          latest="$(git describe --tags --abbrev=0)"
+          $LATEST="$(git describe --tags --abbrev=0)"
           echo $latest
 
-          if [ $latest  = "colorado-v*" ]
+          if [ $LATEST  = "colorado-v*" ]
           then
-            echo "im valid" + $latest
+            echo "im valid" + $LATEST
           else
             echo "im invalid"
           fi
