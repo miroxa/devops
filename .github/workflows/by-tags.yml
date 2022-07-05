@@ -23,7 +23,7 @@ jobs:
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.tag == 'colorado-v' }}
+    if: ${{ needs.build.outputs.tag == 'colorado-v1' }}
     steps:
       - name: Download built colorado files
         run: |
