@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ main, edition_v1 ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -20,33 +20,33 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     outputs:
-      branch: ${{ steps.extract_branch.outputs.branch }}
+      tags: ${{ steps.extract_tags.outputs.tags }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Extract branch name
+      - name: Extract tags name
         shell: bash
-        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+        run: echo "::set-output name=tags::$({GITHUB_REF/refs\/tags\//})"
+        id: extract_tags
 
   deploy-main:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.branch == 'main' }}
+    if: ${{ needs.build.outputs.tags == 'main' }}
     steps:
       - name: Download built frontend files
         run: |
-          echo "Build main branch"
+          echo "Build main tag"
   
   deploy-edition_v1:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.branch == 'edition_v1' }}
+    if: ${{ needs.build.outputs.tags == 'edition_v1' }}
     steps:
       - name: Download built frontend files
         run: |
-          echo "Build edition_v1 branch"
+          echo "Build edition_v1 tags"
 
       # Runs a single command using the runners shell
 #      - name: Run a one-line script
