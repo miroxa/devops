@@ -9,7 +9,7 @@ on:
     tags:
       - '*'
 env:
-  LATEST: v1
+  LATEST: "$(git describe --tags --abbrev=0)"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,21 +21,22 @@ jobs:
       - name: Extract tags name
         shell: bash
         run: |
-          echo "pr is ${{ steps.check.outputs.valid }}"
-          $LATEST="$(git describe --tags --abbrev=0)"
-          echo $latest
-
-          if [ $LATEST  = "colorado-v*" ]
-          then
-            echo "im valid" + $LATEST
-          else
-            echo "im invalid"
-          fi
+          echo $LATEST
+#          echo "pr is ${{ steps.check.outputs.valid }}"
+#          $LATEST="$(git describe --tags --abbrev=0)"
+#          echo $latest
+#
+#          if [ $LATEST  = "colorado-v*" ]
+#          then
+#            echo "im valid" + $LATEST
+#          else
+#            echo "im invalid"
+#          fi
           
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ $latest == 'colorado-v1' }}
+    if: ${{ $LATEST == 'colorado-v1' }}
     steps:
       - name: Download built colorado files
         run: |
