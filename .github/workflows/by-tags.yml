@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Extract tags name
         shell: bash
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: "echo ::set-output name=tag::$(echo ${GITHUB_REF#refs/*/})"
         id: extract_tag
   deploy-colorado:
     needs: build
@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Download built colorado files
         run: |
-          echo "Build 1colorado tag"
+          echo "Build colorado tag"
 #    steps:
 #      - uses: actions/checkout@v2
 #      - name: Set output
