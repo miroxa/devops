@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags: [ colorado-v*, califor-v* ]
+#  pull_request:
+#    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,20 +33,20 @@ jobs:
   deploy-main:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.tags == 'main' }}
+    if: ${{ needs.build.outputs.tags == 'colorado-v*' }}
     steps:
       - name: Download built frontend files
         run: |
-          echo "Build main tag"
+          echo "Build colorado-v tag"
   
   deploy-edition_v1:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.tags == 'edition_v1' }}
+    if: ${{ needs.build.outputs.tags == 'califor-v*' }}
     steps:
       - name: Download built frontend files
         run: |
-          echo "Build edition_v1 tags"
+          echo "Build califor-v* tags"
 
       # Runs a single command using the runners shell
 #      - name: Run a one-line script
