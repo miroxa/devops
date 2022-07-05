@@ -9,7 +9,7 @@ on:
     tags:
       - '*'
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,3 +22,11 @@ jobs:
         run: |
           echo $RELEASE_VERSION
           echo ${{ steps.vars.outputs.tag }}
+  deploy-colorado:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ steps.vars.outputs.tag == 'colorado-v*' }}
+    steps:
+      - name: Download built frontend files
+        run: |
+          echo "Build main branch"
