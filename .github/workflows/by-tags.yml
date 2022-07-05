@@ -7,15 +7,25 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     tags:
-      - 'colorado-v*.*.*'
+      - '*'
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set output
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+  deploy-colorado:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ steps.vars.outputs.tag == 'colorado-v*' }}
+    steps:
+      - name: Download built frontend files
+        run: |
+          echo "Build colorado branch"
+
       - name: Check output
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
