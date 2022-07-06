@@ -14,8 +14,8 @@ jobs:
 #Define outputs for tags    
     outputs:
       output1: ${{ steps.vars.outputs.tag }}
-      output2: ${{ steps.check-tag.outputs.match }}
-      output3: ${{ steps.check-tag1.outputs.match }}
+      colorado-prd: ${{ steps.check-tag.outputs.match }}
+      colorado-stg: ${{ steps.check-tag1.outputs.match }}
       output4: ${{ steps.check-tag2.outputs.match }}
       output5: ${{ steps.check-tag3.outputs.match }}
 
@@ -64,7 +64,7 @@ jobs:
   deploy-colorado-prod:
     needs: build
     runs-on: ubuntu-latest
-    if: needs.build.outputs.output2 == 'true'
+    if: needs.build.outputs.colorado-prd == 'true'
     steps:
       - name: Download built frontend files
         run: |
@@ -73,7 +73,7 @@ jobs:
   deploy-colorado-stg:
     needs: build
     runs-on: ubuntu-latest
-    if: needs.build.outputs.output3 == 'true'
+    if: needs.build.outputs.colorado-stg == 'true'
     steps:
       - name: Download built frontend files
         run: |
