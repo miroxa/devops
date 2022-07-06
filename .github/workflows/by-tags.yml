@@ -16,7 +16,7 @@ jobs:
       output1: ${{ steps.vars.outputs.tag }}
       colorado-prd: ${{ steps.check-tag.outputs.match }}
       colorado-stg: ${{ steps.check-tag1.outputs.match }}
-      calofor-prod: ${{ steps.check-tag2.outputs.match }}
+      califor-prod: ${{ steps.check-tag2.outputs.match }}
       output5: ${{ steps.check-tag3.outputs.match }}
 
     steps:
