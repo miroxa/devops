@@ -17,7 +17,7 @@ jobs:
       colorado-prd: ${{ steps.check-tag.outputs.match }}
       colorado-stg: ${{ steps.check-tag1.outputs.match }}
       califor-prod: ${{ steps.check-tag2.outputs.match }}
-      output5: ${{ steps.check-tag3.outputs.match }}
+      califor-stg: ${{ steps.check-tag3.outputs.match }}
 
     steps:
       - uses: actions/checkout@v2
@@ -91,7 +91,7 @@ jobs:
   deploy-califor-stg:
     needs: build
     runs-on: ubuntu-latest
-    if: needs.build.outputs.output5 == 'true'
+    if: needs.build.outputs.califor-stg == 'true'
     steps:
       - name: Download built frontend files
         run: |
