@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+#Define outputs for tags    
     outputs:
       output1: ${{ steps.vars.outputs.tag }}
       output2: ${{ steps.check-tag.outputs.match }}
