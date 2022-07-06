@@ -30,7 +30,7 @@ jobs:
           fi
 
       - name: Check Tag1
-        id: check-tag
+        id: check-tag1
         run: |
           if [[ ${{ github.event.ref }} =~ ^refs/tags/colorado-stg-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo ::set-output name=match::true
