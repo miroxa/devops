@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.vars.outputs.tag }}
+
     steps:
       - uses: actions/checkout@v2
       - name: Set output
@@ -25,7 +28,7 @@ jobs:
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ env.RELEASE_VERSION == 'colorado' }}
+    if: ${{ needs.build.outputs.output1 == 'colorado' }}
     steps:
       - name: Download built frontend files
         run: |
@@ -34,7 +37,7 @@ jobs:
   deploy-califor:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ env.RELEASE_VERSION == 'califor' }}
+    if: ${{ needs.build.outputs.output1 == 'califor' }}
     steps:
       - name: Download built frontend files
         run: |
