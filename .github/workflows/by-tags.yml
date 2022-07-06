@@ -8,55 +8,34 @@ on:
   push:
     tags:
       - '*'
-env:
-  LATEST: "$(git describe --tags --abbrev=0)"
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.vars.outputs.tag }}
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Extract tags name
-        shell: bash
+      - uses: actions/checkout@v2
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Check output
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
-          echo $LATEST
-#          echo "pr is ${{ steps.check.outputs.valid }}"
-#          $LATEST="$(git describe --tags --abbrev=0)"
-#          echo $latest
-#
-#          if [ $LATEST  = "colorado-v*" ]
-#          then
-#            echo "im valid" + $LATEST
-#          else
-#            echo "im invalid"
-#          fi
-          
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ $LATEST == 'colorado-v1' }}
+    if: ${{ env.RELEASE_VERSION == 'colorado-v*' }}
     steps:
-      - name: Download built colorado files
+      - name: Download built frontend files
         run: |
           echo "Build colorado tag"
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Set output
-#        id: vars
-#        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-#      - name: Check output
-#        env:
-#          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-#        run: |
-#          echo $RELEASE_VERSION
-#          echo ${{ steps.vars.outputs.tag }}
-#  deploy-colorado:
-#    needs: build
-#    runs-on: ubuntu-latest
-#    if: ${{ env.RELEASE_VERSION == 'colorado-v*' }}
-#    steps:
-#      - name: Download built frontend files
-#        run: |
-#          echo "Build main branch"
+
+  deploy-califor:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ env.RELEASE_VERSION == 'califor-v*' }}
+    steps:
+      - name: Download built frontend files
+        run: |
+          echo "Build california tag"
