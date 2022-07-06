@@ -16,22 +16,39 @@ jobs:
       output1: ${{ steps.vars.outputs.tag }}
       output2: ${{ steps.check-tag.outputs.match }}
       output3: ${{ steps.check-tag1.outputs.match }}
+      output4: ${{ steps.check-tag2.outputs.match }}
+      output5: ${{ steps.check-tag3.outputs.match }}
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Check Tag
         id: check-tag
         run: |
-          if [[ ${{ github.event.ref }} =~ ^refs/tags/colorado-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/colorado-prod-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo ::set-output name=match::true
           fi
 
       - name: Check Tag1
-        id: check-tag1 
+        id: check-tag
         run: |
-          if [[ ${{ github.event.ref }} =~ ^refs/tags/califor-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/colorado-stg-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo ::set-output name=match::true
-          fi   
+          fi
+
+      - name: Check Tag2
+        id: check-tag2 
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/califor-prod-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo ::set-output name=match::true
+          fi
+
+      - name: Check Tag3
+        id: check-tag3 
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/califor-stg-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo ::set-output name=match::true
+          fi    
 
       - name: Set output
         id: vars
@@ -43,22 +60,39 @@ jobs:
         run: |
           echo $RELEASE_VERSION
           echo ${{ steps.vars.outputs.tag }}
-  deploy-colorado:
+
+  deploy-colorado-prod:
     needs: build
     runs-on: ubuntu-latest
     if: needs.build.outputs.output2 == 'true'
-#    if:  ${{ needs.build.outputs.output1 == 'colorado-v*' }}
     steps:
       - name: Download built frontend files
         run: |
-          echo "Build colorado tag"
+          echo "Build colorado production tag"
 
-  deploy-califor:
+  deploy-colorado-stg:
     needs: build
     runs-on: ubuntu-latest
     if: needs.build.outputs.output3 == 'true'
-#    if: ${{ needs.build.outputs.output1 == 'califor' }}
     steps:
       - name: Download built frontend files
         run: |
-          echo "Build california tag"
+          echo "Build colorado stage tag"
+
+  deploy-califor-prod:
+    needs: build
+    runs-on: ubuntu-latest
+    if: needs.build.outputs.output4 == 'true'
+    steps:
+      - name: Download built frontend files
+        run: |
+          echo "Build califor production tag"
+
+  deploy-califor-stg:
+    needs: build
+    runs-on: ubuntu-latest
+    if: needs.build.outputs.output5 == 'true'
+    steps:
+      - name: Download built frontend files
+        run: |
+          echo "Build califor stage tag"
