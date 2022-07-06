@@ -37,7 +37,7 @@ jobs:
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: steps.check-tag.outputs.match == 'true'
+    if: needs.build.outputs.output2 == 'true'
 #    if:  ${{ needs.build.outputs.output1 == 'colorado-v*' }}
     steps:
       - name: Download built frontend files
