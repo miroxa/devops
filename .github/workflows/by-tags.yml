@@ -28,7 +28,7 @@ jobs:
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.output1 == 'colorado-v1.0.21' }}
+    if: ${{ needs.build.outputs.output1 == 'colorado-v*' }}
     steps:
       - name: Download built frontend files
         run: |
