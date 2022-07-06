@@ -25,7 +25,7 @@ jobs:
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ env.RELEASE_VERSION == 'colorado-v*' }}
+    if: ${{ env.RELEASE_VERSION == 'colorado' }}
     steps:
       - name: Download built frontend files
         run: |
@@ -34,7 +34,7 @@ jobs:
   deploy-califor:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ env.RELEASE_VERSION == 'califor-v*' }}
+    if: ${{ env.RELEASE_VERSION == 'califor' }}
     steps:
       - name: Download built frontend files
         run: |

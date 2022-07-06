@@ -1,0 +1,62 @@
+## This is a basic workflow to help you get started with Actions
+
+name: CI
+
+## Controls when the workflow will run
+on:
+#  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    tags:
+      - '*'
+env:
+  LATEST: "$(git describe --tags --abbrev=0)"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract tags name
+        shell: bash
+        run: |
+          echo $LATEST
+#          echo "pr is ${{ steps.check.outputs.valid }}"
+#          $LATEST="$(git describe --tags --abbrev=0)"
+#          echo $latest
+#
+#          if [ $LATEST  = "colorado-v*" ]
+#          then
+#            echo "im valid" + $LATEST
+#          else
+#            echo "im invalid"
+#          fi
+          
+  deploy-colorado:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ $LATEST == 'colorado-v1' }}
+    steps:
+      - name: Download built colorado files
+        run: |
+          echo "Build colorado tag"
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Set output
+#        id: vars
+#        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+#      - name: Check output
+#        env:
+#          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+#        run: |
+#          echo $RELEASE_VERSION
+#          echo ${{ steps.vars.outputs.tag }}
+#  deploy-colorado:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    if: ${{ env.RELEASE_VERSION == 'colorado-v*' }}
+#    steps:
+#      - name: Download built frontend files
+#        run: |
+#          echo "Build main branch"
