@@ -13,12 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.vars.outputs.tag }}
+      output2: ${{ steps.check-tag.outputs.match}}
 
     steps:
       - uses: actions/checkout@v2
+      - name: Check Tag
+        id: check-tag
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo ::set-output name=match::true
+          fi
+
       - name: Set output
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Check output
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
@@ -28,7 +37,8 @@ jobs:
   deploy-colorado:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.output1 == 'colorado-v*' }}
+    if: steps.check-tag.outputs.match == 'true'
+#    if:  ${{ needs.build.outputs.output1 == 'colorado-v*' }}
     steps:
       - name: Download built frontend files
         run: |
