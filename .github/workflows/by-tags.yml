@@ -72,16 +72,6 @@ jobs:
       - name: Create kafka dir and paste CRT
         uses: actions/checkout@v2.3.0
 
-##Copy cache files go
-      - name: rsync cache.lua file
-        uses: burnett01/rsync-deployments@5.2
-        with:
-          switches:  -avzr --exclude=/opt/keystone/pkg/cache/*.go
-          path: pkg/cache
-          remote_path:  /mnt/sbservices/from_git/pkg
-          remote_host: 34.132.70.236
-          remote_user: root
-          remote_key: ${{ secrets.SBSEVICES_PRIVATE_KEY }}
 
   deploy-colorado-stg:
     needs: build
